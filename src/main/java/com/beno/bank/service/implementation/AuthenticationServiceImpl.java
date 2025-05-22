@@ -9,6 +9,7 @@ import com.beno.bank.entity.Role;
 import com.beno.bank.entity.User;
 import com.beno.bank.model.AuthenticationResponseModel;
 import com.beno.bank.repository.UserRepository;
+import com.beno.bank.security.JwtService;
 import com.beno.bank.service.AuthenticationService;
 
 import lombok.RequiredArgsConstructor;
@@ -18,7 +19,7 @@ import lombok.RequiredArgsConstructor;
 public class AuthenticationServiceImpl implements AuthenticationService {
 
     private final UserRepository userRepository;
-    // private final AuthenticationManager authenticationManager;
+    private final JwtService jwtService;
 
     @Override
     public AuthenticationResponseModel login(UserDto request) {
@@ -32,7 +33,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         }
         // In real applications, generate a JWT token here
         return AuthenticationResponseModel.builder()
-                .token("Bearer " + user.getEmail() + "-token")
+                .token(jwtService.generateToken(user))
                 .build();
     }
 
